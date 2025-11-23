@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>イレギュラー分 自動計算アプリ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f5f5f5;
+      padding: 40px;
+    }
+    .container {
+      max-width: 420px;
+      margin: auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    .result {
+      background: #fafafa;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>イレギュラー分カロリー → 減らす餌量計算</h2>
+
+    <!-- 入力欄 -->
+    <label for="irregular">イレギュラー分（kcal）を入力</label>
+    <input type="number" id="irregular" placeholder="例：50" />
+
+    <!-- 結果表示 -->
+    <div class="result" id="resultBox">
+      イレギュラー分を入力すると計算結果がここに表示されます。
+    </div>
+  </div>
+
+  <script>
+    const irregularInput = document.getElementById("irregular");
+    const resultBox = document.getElementById("resultBox");
+
+    irregularInput.addEventListener("input", () => {
+      const irregular = Number(irregularInput.value);
+      if (!irregular || irregular <= 0) {
+        resultBox.textContent = "イレギュラー分を入力してください。";
+        return;
+      }
+
+      // 1g = 4kcal
+      const caloriePerGram = 4;
+
+      // 1日で減らす量(合計)
+      const totalReduce = irregular / caloriePerGram; // g
+
+      // 四捨五入して実用的な整数に
+      const totalReduceRounded = Math.round(totalReduce);
+
+      // 1日2回与える想定 → 1回あたり
+      const perMeal = totalReduceRounded / 2;
+
+      resultBox.innerHTML = `
+        <b>■ 自動計算結果</b><br><br>
+        1日に減らす餌量：<b>${totalReduceRounded} g</b><br>
+        1回あたり（1日2回の場合）：<b>${perMeal.toFixed(1)} g</b><br>
+      `;
+    });
+  </script>
+</body>
+</html>
